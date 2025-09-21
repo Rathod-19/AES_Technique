@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Network Security - AES Encryption</title>
+    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+    <div class="container">
+        <h1>🔐 AES Encryption & Decryption</h1>
+        <p class="subtitle">Secure your text with AES-256 encryption in your browser.</p>
+
+        <!-- Secret Key Input -->
+        <input type="text" id="secret-key" placeholder="Enter secret key (required)" />
+
+        <!-- Plaintext -->
+        <textarea id="plaintext" placeholder="Enter text to encrypt..."></textarea>
+        <button onclick="encryptText()">Encrypt</button>
+
+        <!-- Ciphertext -->
+        <textarea id="ciphertext" placeholder="Encrypted text appears here..."></textarea>
+        <button onclick="decryptText()">Decrypt</button>
+
+        <!-- Decrypted Text -->
+        <textarea id="decrypted" placeholder="Decrypted text appears here..." readonly></textarea>
+    </div>
+
+    <script>
+        // Convert string to ArrayBuffer
+        function str2ab(str) {
+            return new TextEncoder().encode(str);
+        }
+
+        // Convert ArrayBuffer to Base64
+        function ab2b64(buf) {
+            return btoa(String.fromCharCode(...new Uint8Array(buf)));
+        }
+
+        // Convert Base64 to ArrayBuffer
+        function b642ab(b64) {
+            return Uint8Array.from(atob(b64), c => c.charCodeAt(0));
+        }
+
+        // Derive AES-GCM key from user secret
+        async function getKeyFromPassword(password) {
+            const enc = new TextEncoder();
+            const keyMaterial = await crypto.subtle.importKey(
+                "raw",
+                enc.encode(password),
+                "PBKDF2",
+                false,
+                ["deriveKey"]
+            );
+            return crypto.subtle.deriveKey(
+                {
+                    name: "PBKDF2",
+                    salt: enc.encode("network-security-salt"), // constant salt
+                    iterations: 100000,
+                    hash: "SHA-256"
+                },
+                keyMaterial,
+                { name: "AES-GCM", length: 256 },
+                true,
+                ["encrypt", "decrypt"]
+            );
+        }
+
+        // Encrypt text
+        async function encryptText() {
+            const password = document.getElementById("secret-key").value;
+            if (!password) return alert("Secret Key is required!");
+
+            const plaintext = document.getElementById("plaintext").value;
+            if (!plaintext) return alert("Enter text to encrypt.");
+
+            const aesKey = await getKeyFromPassword(password);
+            const iv = crypto.getRandomValues(new Uint8Array(12));
+
+            const encrypted = await crypto.subtle.encrypt(
+                { name: "AES-GCM", iv },
+                aesKey,
+                str2ab(plaintext)
+            );
+
+            const payload = new Uint8Array(iv.length + encrypted.byteLength);
+            payload.set(iv, 0);
+            payload.set(new Uint8Array(encrypted), iv.length);
+
+            document.getElementById("ciphertext").value = ab2b64(payload);
+        }
+
+        // Decrypt text
+        async function decryptText() {
+            const password = document.getElementById("secret-key").value;
+            if (!password) return alert("Secret Key is required!");
+
+            const ciphertextB64 = document.getElementById("ciphertext").value;
+            if (!ciphertextB64) return alert("Enter ciphertext to decrypt.");
+
+            const aesKey = await getKeyFromPassword(password);
+
+            try {
+                const data = b642ab(ciphertextB64);
+                const iv = data.slice(0, 12);
+                const encrypted = data.slice(12);
+
+                const decrypted = await crypto.subtle.decrypt(
+                    { name: "AES-GCM", iv },
+                    aesKey,
+                    encrypted
+                );
+
+                document.getElementById("decrypted").value = new TextDecoder().decode(decrypted);
+            } catch (e) {
+                alert("Decryption failed. Make sure the secret key and ciphertext are correct.");
+            }
+        }
+    </script>
+</body>
+
+</html>

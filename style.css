@@ -1,0 +1,178 @@
+/* Background with animated gradient */
+body {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  background: linear-gradient(-45deg, #add8e6, #87cefa, #9face6, #a18cd1);
+  background-size: 400% 400%;
+  animation: gradientBG 12s ease infinite;
+  
+  display: flex;
+  justify-content: center;  
+  align-items: center;     
+  
+  min-height: 100vh;
+  padding-top: 0;
+  color: #111;            /* Dark text for readability */
+  overflow: hidden;          
+}
+
+/* Aurora Gradient Animation */
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Container with glassmorphism */
+.container {
+  background: rgba(255, 255, 255, 0.12); /* slightly darker for contrast */
+  padding: 2rem;
+  border-radius: 20px;
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.25);
+  text-align: center;
+  max-width: 650px;
+  width: 90%;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  animation: fadeIn 1.2s ease-in-out;
+  box-sizing: border-box;
+  color: #111; /* dark text inside container */
+}
+
+/* Fade-in effect */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Headings */
+h1 {
+  font-size: 2rem;
+  margin-top: -0.3rem;
+  margin-bottom: 1rem;
+  background: linear-gradient(90deg, #6a11cb, #2575fc, #9face6, #a18cd1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.subtitle {
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+  color: #111; /* dark subtitle */
+}
+
+.intro {
+  text-align: center;
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 1rem 0;
+  color: #111; /* dark paragraph text */
+}
+
+/* Unified styling for inputs & textareas */
+input, textarea {
+  width: 95%;
+  border-radius: 14px;
+  padding: 0.8rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border: none;
+  outline: none;
+  background: rgba(255, 255, 255, 0.25); /* slightly darker */
+  color: #111;                              /* dark text */
+  margin-bottom: 1.2rem;
+  box-shadow: inset 0 2px 8px rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+input:focus, textarea:focus {
+  background: rgba(255, 255, 255, 0.35); /* brighter on focus */
+  box-shadow: 0 0 12px rgba(100, 149, 237, 0.7);
+}
+
+/* Fix textarea height */
+textarea {
+  min-height: 90px;
+  resize: none;
+}
+
+/* Buttons */
+button {
+  margin-bottom: 1.2rem;
+  padding: 0.8rem 1.4rem;
+  border: none;
+  border-radius: 14px;
+  font-size: 1rem;
+  font-weight: 500;
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
+  color: #fff; /* button text remains white */
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 18px rgba(37, 117, 252, 0.4);
+}
+
+button:hover {
+  background: linear-gradient(135deg, #2575fc, #6a11cb);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(106, 17, 203, 0.6);
+}
+
+/* Features list */
+.features {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0 0 0;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.features li {
+  background: rgba(255, 255, 255, 0.2);  /* darker for contrast */
+  padding: 0.7rem 1.2rem;
+  border-radius: 14px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #111;                             /* dark text */
+  box-shadow: 0 5px 15px rgba(0,0,0,0.25);
+  transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
+  cursor: default;
+}
+
+.features li:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.35);
+  background: rgba(255, 255, 255, 0.3);
+}
+
+#decrypted{
+  margin-bottom: -0.3rem;
+}
+
+/* Responsive */
+@media (max-width: 700px) {
+  .container {
+    padding: 1.5rem;
+  }
+
+  h1 {
+    font-size: 1.6rem;
+  }
+
+  input, textarea {
+    font-size: 0.9rem;
+    min-height: 70px;
+  }
+
+  button {
+    width: 100%;
+    margin: 0.4rem 0;
+  }
+}
+
+.home-button-container{
+  margin-top: 1.5rem;
+}
